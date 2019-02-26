@@ -1,2 +1,2 @@
-# membership
+# Membership
 Membership management backend application.
