@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,8 +16,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "member")
 public class Member {
 
+	public Member() {
+	}
+
+	public Member(String firstName, String lastName, Plan plan) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.plan = plan;
+	}
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="member_seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_seq")
+	@SequenceGenerator(name = "member_seq", sequenceName = "member_seq", allocationSize = 20)
 	private Long id;
 
 	@Column(name = "first_name")

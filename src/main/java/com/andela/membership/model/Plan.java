@@ -19,8 +19,19 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "plan")
 public class Plan {
 
+	public Plan() {
+
+	}
+	
+	public Plan(String name, LocalDate startDate, LocalDate endDate) {
+		this.name = name;
+		this.startDate = startDate;
+		this.endDate = endDate;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "plan_seq")
+	@SequenceGenerator(name = "plan_seq", sequenceName = "plan_seq", allocationSize = 20)
 	private Long id;
 
 	private String name;

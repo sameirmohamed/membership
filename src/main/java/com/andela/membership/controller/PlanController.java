@@ -11,45 +11,38 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.andela.membership.exceptoin.PlanNotFoundException;
 import com.andela.membership.model.Plan;
-import com.andela.membership.repository.PlanRepository;
+import com.andela.membership.service.PlanService;
 
 @RestController
 public class PlanController {
 
 	@Autowired
-	PlanRepository planRepository;
+	PlanService planService;
 
 	@GetMapping("/plan")
 	public List<Plan> getAllPlans() {
-		return planRepository.findAll();
+		return planService.getAllPlans();
 	}
 
 	@GetMapping("/plan/{id}")
 	public Plan getPlan(@PathVariable Long id) {
-		return planRepository.findById(id).orElseThrow(() -> new PlanNotFoundException(id));
+		return planService.getPlan(id);
 	}
 
 	@PostMapping("/plan")
 	public Plan createPlan(@RequestBody Plan plan) {
-		return planRepository.save(plan);
+		return planService.createPlan(plan);
 	}
 
 	@DeleteMapping("/plan/{id}")
 	public void deletePlan(@PathVariable Long id) {
-		Plan plan = planRepository.findById(id).orElseThrow(() -> new PlanNotFoundException(id));
-		planRepository.delete(plan);
+		planService.deletePlan(id);
 	}
 
 	@PutMapping("/plan/{id}")
 	public Plan update(@PathVariable Long id, @RequestBody Plan newPlan) {
-		return planRepository.findById(id).map(plan -> {
-			plan.setName(newPlan.getName());
-			plan.setStartDate(newPlan.getStartDate());
-			plan.setEndDate(newPlan.getEndDate());
-			return planRepository.save(plan);
-		}).orElseThrow(() -> new PlanNotFoundException(id));
+		return planService.update(id, newPlan);
 	}
 
 }

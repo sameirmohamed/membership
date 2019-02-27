@@ -9,31 +9,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.andela.membership.exceptoin.PlanNotFoundException;
 import com.andela.membership.model.Member;
-import com.andela.membership.model.Plan;
-import com.andela.membership.repository.MemberRepository;
-import com.andela.membership.repository.PlanRepository;
+import com.andela.membership.service.MemberService;
 
 @RestController
 public class MemberController {
 
 	@Autowired
-	PlanRepository planRepository;
-	
-	@Autowired
-	MemberRepository memberRepository;
+	MemberService memberService;
 
 	@GetMapping("/plan/{id}/members")
 	public Set<Member> getPlanMembmersById(@PathVariable Long id) {
-		Plan plan = planRepository.findById(id).orElseThrow(() -> new PlanNotFoundException(id));
-		return plan.getMembers();
+		return memberService.getPlanMembmersById(id);
 	}
 
 	@PostMapping("/plan/{id}/members")
 	public void createMember(@PathVariable Long id, @RequestBody Member member) {
-		Plan plan = planRepository.findById(id).orElseThrow(() -> new PlanNotFoundException(id));
-		member.setPlan(plan);
-		memberRepository.save(member);
+		memberService.createMember(id, member);
 	}
 }
